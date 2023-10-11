@@ -49,13 +49,13 @@ public class StudentList {
 			try {
 				BufferedReader bufferreader = readfile();
 				String studentnames[] = bufferreader.readLine().split(constants.COMMA);
-				boolean done = false;
 				String name = args[0].substring(1);
-				for (int index = 0; index < studentnames.length && !done; index++) {
+				int countNames = 0;
+				for (int index = 0; index < studentnames.length; index++) {
 					if (studentnames[index].trim().equals(name)) {
-						System.out.println(constants.WE_FOUND_MESSAGE);
-						done = true;
+						countNames = countNames + 1;
 					}
+
 				}
 				bufferreader.close();
 			} catch (Exception e) {
@@ -66,19 +66,7 @@ public class StudentList {
 			try {
 				BufferedReader bufferreader = readfile();
 				char names[] = bufferreader.readLine().toCharArray();
-				boolean in_word = false;
-				int count = 0;
-				for (char ch : names) {
-					if (ch == constants.SPACE) {
-						if (!in_word) {
-							count++;
-							in_word = true;
-						} else {
-							in_word = false;
-						}
-					}
-				}
-				System.out.println(count + constants.FOUND_MESSAGE);
+				System.out.println(names.length + constants.FOUND_MESSAGE);
 				bufferreader.close();
 			} catch (Exception e) {
 			}
