@@ -4,90 +4,103 @@ import java.util.*;
 
 public class StudentList {
 	public static void main(String[] args) {
-		// checking Arguments.
-		if (args.length != 1) {
-			System.out.println(constants.INVALID_MESSAGE);
-		} else if (args[0].equals(constants.SHOW_ALL)) {
-			System.out.println(constants.LOADED_DATA);
-			try {
-				BufferedReader bufferreader = readfile(); // read elements of file.
-				String studentnames[] = bufferreader.readLine().split(constants.COMMA);
-				for (String name : studentnames) {
-					System.out.println(name.trim());
-				}
-				bufferreader.close();
-			} catch (Exception e) {
-			}
-			System.out.println(constants.DATA_LOADED);
-		} // finding and printing random names from file.
-		else if (args[0].equals(constants.RANDOM_NAME)) {
-			System.out.println(constants.LOADED_DATA);
-			try {
-				BufferedReader bufferreader = readfile();
-				String studentnames[] = bufferreader.readLine().split(constants.COMMA);
-				int randomindex = new Random().nextInt(studentnames.length); // Random object created
-				System.out.println(studentnames[randomindex].trim());
-				bufferreader.close();
-			} catch (Exception e) {
-			}
-			System.out.println(constants.DATA_LOADED);
-		} // added new elemrnt into the file.
-		else if (args[0].contains(constants.PLUS)) {
-			System.out.println(constants.LOADED_DATA);
-			try {
-				BufferedWriter bufferwriter = writefile();
-				String name = args[0].substring(1);
-				Date date = new Date();
-				DateFormat dateFormat = new SimpleDateFormat(constants.DATE);
-				String formatdate = dateFormat.format(date);
-				bufferwriter.write(constants.COMMA + name + constants.LAST_UPDATE_MESSAGE + formatdate);
-				bufferwriter.close();
-			} catch (Exception e) {
-			}
 
-			System.out.println(constants.DATA_LOADED);
-		} // find out the specific word from file.
-		else if (args[0].contains(constants.FIND)) {
-			System.out.println(constants.LOADED_DATA);
-			try {
-				BufferedReader bufferreader = readfile();
-				String studentnames[] = bufferreader.readLine().split(constants.COMMA);
-				String name = args[0].substring(1);
-				int countNames = 0;
-				for (int index = 0; index < studentnames.length; index++) {
-					if (studentnames[index].trim().equals(name)) {
-						countNames = countNames + 1;
-					}
-
-				}
-				bufferreader.close();
-			} catch (Exception e) {
-			}
-			System.out.println(constants.DATA_LOADED);
-		} // counting the words.
-		else if (args[0].contains(constants.COUNT)) {
-			System.out.println(constants.LOADED_DATA);
-			try {
-				BufferedReader bufferreader = readfile();
-				char names[] = bufferreader.readLine().toCharArray();
-				System.out.println(names.length + constants.FOUND_MESSAGE);
-				bufferreader.close();
-			} catch (Exception e) {
-			}
-			System.out.println(constants.DATA_LOADED);
-		} else {
-			System.out.println(constants.INVALID_MESSAGE);
+		// Check arguments
+		if(args.length != 1)
+		{
+          System.out.println("use valid argument\n a for show all\n r for random item\n c for count\n + for add new\n ? for find specific item\n");
 		}
-	}
+		else if (args[0].equals("a")) {
+			System.out.println("Loading data ...");
+			try {
+				BufferedReader s = new BufferedReader(
+						new InputStreamReader(
+								new FileInputStream("students.txt")));
+				String r = s.readLine();
+				String i[] = r.split(",");
+				for (String j : i) {
+					System.out.println(j.trim());
+				}
+			} catch (Exception e) {
+			}
+			System.out.println("Data Loaded.");
+		} else if (args[0].equals("r")) {
+			System.out.println("Loading data ...");
+			try {
+				BufferedReader s = new BufferedReader(
+						new InputStreamReader(
+								new FileInputStream("students.txt")));
+				String r = s.readLine();
+				String i[] = r.split(",");
+				Random x = new Random();
+				int y = x.nextInt(i.length);
+				System.out.println(i[y].trim());
+			} catch (Exception e) {
+			}
+			System.out.println("Data Loaded.");
+		} else if (args[0].contains("+")) {
+			System.out.println("Loading data ...");
+			try {
+				BufferedWriter s = new BufferedWriter(
+						new FileWriter("students.txt", true));
+				String t = args[0].substring(1);
+				Date d = new Date();
+				String df = "dd/mm/yyyy-hh:mm:ss a";
+				DateFormat dateFormat = new SimpleDateFormat(df);
+				String fd = dateFormat.format(d);
+				s.write(", " + t + "\nList last updated on " + fd);
+				s.close();
+			} catch (Exception e) {
+			}
 
-	private static BufferedWriter writefile() throws IOException {
-		return new BufferedWriter(
-				new FileWriter(constants.FILE_NAME, true));
-	}
-
-	private static BufferedReader readfile() throws FileNotFoundException {
-		return new BufferedReader(
-				new InputStreamReader(
-						new FileInputStream(constants.FILE_NAME)));
+			System.out.println("Data Loaded.");
+		} else if (args[0].contains("?")) {
+			System.out.println("Loading data ...");
+			try {
+				BufferedReader s = new BufferedReader(
+						new InputStreamReader(
+								new FileInputStream("students.txt")));
+				String r = s.readLine();
+				String i[] = r.split(",");
+				boolean done = false;
+				String t = args[0].substring(1);
+				for (int idx = 0; idx < i.length && !done; idx++) {
+					if (i[idx].equals(t)) {
+						System.out.println("We found it!");
+						done = true;
+					}
+				}
+			} catch (Exception e) {
+			}
+			System.out.println("Data Loaded.");
+		} else if (args[0].contains("c")) {
+			System.out.println("Loading data ...");
+			try {
+				BufferedReader s = new BufferedReader(
+						new InputStreamReader(
+								new FileInputStream("students.txt")));
+				String D = s.readLine();
+				char a[] = D.toCharArray();
+				boolean in_word = false;
+				int count = 0;
+				for (char c : a) {
+					if (c == ' ') {
+						if (!in_word) {
+							count++;
+							in_word = true;
+						} else {
+							in_word = false;
+						}
+					}
+				}
+				System.out.println(count + " word(s) found ");
+			} catch (Exception e) {
+			}
+			System.out.println("Data Loaded.");
+		}
+		else
+		{
+			System.out.println("use valid argument\n a for show all\n r for random item\n c for count\n + for add new\n ? for find specific item\n");
+		}
 	}
 }
